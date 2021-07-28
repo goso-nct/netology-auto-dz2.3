@@ -4,7 +4,7 @@ import com.github.javafaker.Faker;
 
 import java.util.Locale;
 
-public class DataGeneratorImplFaker implements DataGenerator {
+public class DataGeneratorImplFaker implements IDataGenerator {
 
     Faker ruFaker = new Faker(new Locale("ru-RU"));
 

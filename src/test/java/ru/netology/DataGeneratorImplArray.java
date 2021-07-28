@@ -2,7 +2,7 @@ package ru.netology;
 
 import java.util.Random;
 
-public class DataGeneratorImplArray implements DataGenerator {
+public class DataGeneratorImplArray implements IDataGenerator {
 
     // only 10 elements or change getRandom() !!!
 

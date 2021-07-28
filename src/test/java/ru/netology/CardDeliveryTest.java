@@ -1,31 +1,23 @@
 package ru.netology;
 
 import com.codeborne.selenide.SelenideElement;
-import com.github.javafaker.Faker;
-import com.github.javafaker.service.FakeValuesService;
-import com.github.javafaker.service.RandomService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.Test;
-
 import org.openqa.selenium.Keys;
 
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.Condition.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CardDeliveryTest {
 
+    DataGenerator.UserInfo user = DataGenerator.Registration.generateUser("ru");
+    String firstMeetingDate = DataGenerator.generateDate(4);
+    String secondMeetingDate = DataGenerator.generateDate(7);
     SelenideElement element;
-    //DataGenerator data = new DataGeneratorImplArray();
-    DataGenerator data = new DataGeneratorImplFaker();
 
     @BeforeEach
     public void setUp() {
@@ -39,26 +31,26 @@ public class CardDeliveryTest {
 
     @RepeatedTest(3)
     void shouldSuccessfulPlanAndReplanMeeting() {
-        $("[data-test-id=city] input").setValue(data.generateCity());
+        System.out.println(user + ", d1=" + firstMeetingDate + ", d2=" + secondMeetingDate);
 
-        String date = data.generateDate(5);
+        $("[data-test-id=city] input").setValue(user.getCity());
+
         $("[data-test-id=date] input").doubleClick();
         $("[data-test-id=date] input").sendKeys(Keys.DELETE);
-        $("[data-test-id=date] input").setValue(date);
+        $("[data-test-id=date] input").setValue(firstMeetingDate);
 
-        $("[data-test-id=name] input").setValue(data.generateName());
-        $("[data-test-id=phone] input").setValue(data.generatePhone());
+        $("[data-test-id=name] input").setValue(user.getName());
+        $("[data-test-id=phone] input").setValue(user.getPhone());
         $("[data-test-id=agreement] .checkbox__box").click();
         $("[role=button] .button__content").click();
 
         element = $("[data-test-id=success-notification] .notification__content");
         element.shouldBe(visible);
-        assertEquals("Встреча успешно запланирована на " + date, element.getText());
+        assertEquals("Встреча успешно запланирована на " + firstMeetingDate, element.getText());
 
-        date = data.generateDate(8);
         $("[data-test-id=date] input").doubleClick();
         $("[data-test-id=date] input").sendKeys(Keys.DELETE);
-        $("[data-test-id=date] input").setValue(date);
+        $("[data-test-id=date] input").setValue(secondMeetingDate);
         $("[role=button] .button__content").click();
 
         element = $("[data-test-id=replan-notification] .notification__content");
@@ -69,7 +61,7 @@ public class CardDeliveryTest {
 
         element = $("[data-test-id=success-notification] .notification__content");
         element.shouldBe(visible);
-        assertEquals("Встреча успешно запланирована на " + date, element.getText());
+        assertEquals("Встреча успешно запланирована на " + secondMeetingDate, element.getText());
     }
 
 }
