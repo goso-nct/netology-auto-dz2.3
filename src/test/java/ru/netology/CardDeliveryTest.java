@@ -1,14 +1,19 @@
 package ru.netology;
 
 import com.codeborne.selenide.SelenideElement;
+import com.github.javafaker.Faker;
+import com.github.javafaker.service.FakeValuesService;
+import com.github.javafaker.service.RandomService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import org.openqa.selenium.Keys;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
@@ -19,7 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class CardDeliveryTest {
 
     SelenideElement element;
-    DataGenerator data = new DataGeneratorImplArray();
+    //DataGenerator data = new DataGeneratorImplArray();
+    DataGenerator data = new DataGeneratorImplFaker();
 
     @BeforeEach
     public void setUp() {
@@ -31,7 +37,7 @@ public class CardDeliveryTest {
         closeWebDriver();
     }
 
-    @Test
+    @RepeatedTest(3)
     void shouldSuccessfulPlanAndReplanMeeting() {
         $("[data-test-id=city] input").setValue(data.generateCity());
 
