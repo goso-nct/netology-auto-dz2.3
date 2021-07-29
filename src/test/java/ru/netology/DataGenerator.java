@@ -6,6 +6,7 @@ import lombok.Value;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Random;
 
 public class DataGenerator {
 
@@ -14,8 +15,10 @@ public class DataGenerator {
     private DataGenerator() {
     }
 
-    public static String generateDate(int shift) {
-        return LocalDate.now().plusDays(shift).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+    public static String generateDate(int minShift, int maxShift) {
+        Random random = new Random();
+        int addDays = random.ints(minShift, maxShift).findFirst().getAsInt();
+        return LocalDate.now().plusDays(addDays).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
     }
 
     public static String generateCity() {
@@ -23,7 +26,7 @@ public class DataGenerator {
     }
 
     public static String generateName() {
-        return faker.name().fullName();
+        return faker.name().fullName().replaceAll("ё","е");
     }
 
     public static String generatePhone() {

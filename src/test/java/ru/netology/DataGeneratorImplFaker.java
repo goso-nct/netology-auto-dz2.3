@@ -15,7 +15,7 @@ public class DataGeneratorImplFaker implements IDataGenerator {
 
     @Override
     public String generateName() {
-        return ruFaker.name().fullName();
+        return ruFaker.name().fullName().replaceAll("ё","е");
     }
 
     @Override
